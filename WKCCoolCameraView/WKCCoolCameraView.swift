@@ -646,7 +646,7 @@ extension WKCCoolCameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCap
         
         if runningMode == .takePhoto {
             runningMode = .common
-            let buffer: CVPixelBuffer? = sampleBuffer.imageBuffer
+            let buffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
             guard let buf = buffer else { return }
             let image = WKCCoolHelper.image(buffer: buf)
             
@@ -659,7 +659,7 @@ extension WKCCoolCameraView: AVCaptureVideoDataOutputSampleBufferDelegate, AVCap
             }
         } else if runningMode == .videoRecord {
             if recordEncoder == nil {
-                let buffer: CVPixelBuffer? = sampleBuffer.imageBuffer
+                let buffer: CVPixelBuffer? = CMSampleBufferGetImageBuffer(sampleBuffer)
                 guard let buf = buffer else { return }
                 let frameWidth = CVPixelBufferGetWidth(buf)
                 let frameHeight = CVPixelBufferGetHeight(buf)
