@@ -10,10 +10,35 @@ import UIKit
 import AVFoundation
 
 @objc public protocol WKCCoolCameraViewDelegate: NSObjectProtocol {
+    
+    /// 流回调
+    /// - Parameters:
+    ///   - cool: camera
+    ///   - sampleBuffer: 流
     @objc optional func coolCameraDidOutputVideoBuffer(cool: WKCCoolCameraView, sampleBuffer: CMSampleBuffer)
+    
+    /// 拍照
+    /// - Parameters:
+    ///   - cool: camera
+    ///   - image: 照片
     @objc optional func coolCameraDidTakePhoto(cool: WKCCoolCameraView, image: UIImage)
+    
+    /// 录像
+    /// - Parameters:
+    ///   - cool: camera
+    ///   - videoPath: 路径
     @objc optional func coolCameraDidVideoRecorded(cool: WKCCoolCameraView, videoPath: String)
+    
+    /// 聚焦
+    /// - Parameters:
+    ///   - cool: camera
+    ///   - point: 聚焦点
     @objc optional func coolCameraDidFocus(cool: WKCCoolCameraView, point: CGPoint)
+    
+    /// 缩放
+    /// - Parameters:
+    ///   - cool: camera
+    ///   - zoom: 缩放比例
     @objc optional func coolCameraDidZoom(cool: WKCCoolCameraView, zoom: CGFloat)
 }
 
@@ -424,7 +449,7 @@ public class WKCCoolCameraView: UIView {
         zoom(scale: 0)
 
         if isFront {
-            NotificationCenter.default.post(name: NSNotification.Name(WKCNamaNotificationCameraFlashChanged), object: nil, userInfo: [WKCNamaCameraIsFlashOnKey : false])
+            NotificationCenter.default.post(name: NSNotification.Name(flashChangedNotification), object: nil, userInfo: [isFlashOnKey : false])
         }
     }
     
@@ -444,7 +469,7 @@ public class WKCCoolCameraView: UIView {
             flashMode = .off
         }
         
-        NotificationCenter.default.post(name: NSNotification.Name(WKCNamaNotificationCameraFlashChanged), object: nil, userInfo: [WKCNamaCameraIsFlashOnKey: (flashMode == .on)])
+        NotificationCenter.default.post(name: NSNotification.Name(flashChangedNotification), object: nil, userInfo: [isFlashOnKey: (flashMode == .on)])
         
         if let com = completion {
             com(true)
